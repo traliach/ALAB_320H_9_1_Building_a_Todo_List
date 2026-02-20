@@ -171,11 +171,20 @@ export default function App() {
               </button>
             </form>
 
-            <ul className="mt-4 space-y-2">
-              {todos.map((todo) => (
-                <TodoItem key={todo.id} todo={todo} dispatch={dispatch} />
-              ))}
-            </ul>
+            {todos.length === 0 ? (
+              <div className="mt-4 rounded-xl border border-dashed border-white/15 bg-black/10 p-6 text-center">
+                <p className="text-sm font-medium text-white/80">No todos yet</p>
+                <p className="mt-1 text-sm text-white/60">
+                  Add your first one above.
+                </p>
+              </div>
+            ) : (
+              <ul className="mt-4 space-y-2">
+                {todos.map((todo) => (
+                  <TodoItem key={todo.id} todo={todo} dispatch={dispatch} />
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </div>
