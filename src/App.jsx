@@ -10,13 +10,18 @@ const initialTodos = [
 
 function todosReducer(state, action) {
   switch (action.type) {
+    case 'TOGGLE_TODO': {
+      return state.map((todo) =>
+        todo.id === action.id ? { ...todo, completed: !todo.completed } : todo,
+      )
+    }
     default:
       return state
   }
 }
 
 export default function App() {
-  const [todos] = useReducer(todosReducer, initialTodos)
+  const [todos, dispatch] = useReducer(todosReducer, initialTodos)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-950 to-indigo-950 text-white">
@@ -46,7 +51,7 @@ export default function App() {
                   <input
                     type="checkbox"
                     checked={todo.completed}
-                    readOnly
+                    onChange={() => dispatch({ type: 'TOGGLE_TODO', id: todo.id })}
                     className="h-4 w-4 accent-indigo-400"
                   />
 
