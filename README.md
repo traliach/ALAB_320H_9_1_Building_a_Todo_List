@@ -1,16 +1,107 @@
-# React + Vite
+# ALAB 320H.9.1 — Todo List (React + Tailwind)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a simple **Todo List** app made with **React**, **Vite**, and **Tailwind CSS**.
 
-Currently, two official plugins are available:
+The vibe is a kid-friendly “little helper” checklist (meals + snacks), but you can add any kind of task you want.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## What it can do (rubric checklist)
 
-## React Compiler
+* **Heading:** “Todo List”
+* **Add a todo**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+  * Uses a controlled input
+  * New todos show up at the **top** (newest first)
+* **Complete a todo**
 
-## Expanding the ESLint configuration
+  * Checkbox toggles completed / not completed
+  * Completed todos look **muted** and have a **line-through**
+* **Delete a todo**
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+  * Delete removes the todo
+  * The **Delete button only works if the todo is completed** (otherwise it’s disabled)
+* **Edit a todo**
+
+  * Edit turns the title into a controlled input
+  * While editing:
+
+    * **Edit/Delete buttons disappear**
+    * **Save button shows up**
+  * Keyboard shortcuts:
+
+    * **Enter = Save**
+    * **Escape = Cancel**
+* **State rules**
+
+  * Todos are handled with `useReducer`
+  * UI stuff uses `useState` (new todo input + edit text for each item)
+
+---
+
+## Getting started
+
+### You need these first
+
+* Node.js installed
+* npm installed (npm comes with Node)
+
+### Install + run the app
+
+In the project folder, run:
+
+```bash
+npm install
+npm run dev
+```
+
+Then open the link Vite prints in the terminal (usually `http://localhost:5173/`).
+
+### Build + lint (optional but good)
+
+```bash
+npm run build
+npm run lint
+```
+
+---
+
+## How to demo it (quick)
+
+1. **Add**
+
+   * Type a todo → click **Add**
+   * It should appear at the top
+2. **Toggle**
+
+   * Click the checkbox
+   * The style should change (muted + line-through)
+3. **Delete rule**
+
+   * Try deleting an unfinished todo → Delete should be disabled
+   * Mark it complete → Delete becomes clickable → delete it
+4. **Edit**
+
+   * Click **Edit** → input shows up + **Save** button appears
+   * Type a change
+   * Press **Enter** to save (or click Save)
+   * Press **Escape** to cancel
+
+---
+
+## Helpful commands
+
+* `npm run dev` — starts the dev server
+* `npm run build` — makes a production build
+* `npm run preview` — previews the build locally
+* `npm run lint` — runs ESLint
+
+---
+
+## Notes / common issues
+
+* If your editor complains about `@tailwind` being “unknown”, that’s usually just the editor being picky. The app can still run fine.
+* If installs ever get weird, do a clean reinstall:
+
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
