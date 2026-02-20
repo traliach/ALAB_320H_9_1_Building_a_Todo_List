@@ -15,6 +15,9 @@ function todosReducer(state, action) {
         todo.id === action.id ? { ...todo, completed: !todo.completed } : todo,
       )
     }
+    case 'DELETE_TODO': {
+      return state.filter((todo) => todo.id !== action.id)
+    }
     default:
       return state
   }
@@ -78,6 +81,7 @@ export default function App() {
                       title={
                         todo.completed ? 'Delete todo' : 'Complete before deleting'
                       }
+                      onClick={() => dispatch({ type: 'DELETE_TODO', id: todo.id })}
                     >
                       Delete
                     </button>
