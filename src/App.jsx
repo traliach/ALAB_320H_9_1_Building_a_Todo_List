@@ -21,16 +21,37 @@ function todosReducer(state, action) {
     case 'DELETE_TODO': {
       return state.filter((todo) => todo.id !== action.id)
     }
+    case 'UPDATE_TODO': {
+      return state.map((todo) =>
+        todo.id === action.id ? { ...todo, title: action.title } : todo,
+      )
+    }
     default:
       return state
   }
 }
 
 function TodoItem({ todo, dispatch }) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [draftTitle, setDraftTitle] = useState(todo.title)
+
+  function startEditing() {
+    setDraftTitle(todo.title)
+    setIsEditing(true)
+  }
+
+  function saveEdit() {
+    const nextTitle = draftTitle.trim()
+    if (!nextTitle) return
+    dispatch({ type: 'UPDATE_TODO', id: todo.id, title: nextTitle })
+    setIsEditing(false)
+  }
+
   return (
     <li
       className={[
         'flex items-center gap-3 rounded-xl border p-3',
+        isEditing ? 'ring-2 ring-indigo-400/30' : '',
         todo.completed
           ? 'border-white/10 bg-white/5 text-white/60'
           : 'border-white/10 bg-black/20 text-white',
@@ -43,31 +64,58 @@ function TodoItem({ todo, dispatch }) {
         className="h-4 w-4 accent-indigo-400"
       />
 
-      <span
-        className={[
-          'flex-1 text-sm sm:text-base',
-          todo.completed ? 'line-through' : '',
-        ].join(' ')}
-      >
-        {todo.title}
-      </span>
+      <div className="flex-1">
+        {isEditing ? (
+          <label className="block">
+            <span className="sr-only">Edit todo title</span>
+            <input
+              value={draftTitle}
+              onChange={(e) => setDraftTitle(e.target.value)}
+              className="h-10 w-full rounded-lg border border-white/10 bg-black/30 px-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+              autoFocus
+            />
+          </label>
+        ) : (
+          <span
+            className={[
+              'block text-sm sm:text-base',
+              todo.completed ? 'text-white/60 line-through' : '',
+            ].join(' ')}
+          >
+            {todo.title}
+          </span>
+        )}
+      </div>
 
       <div className="flex items-center gap-2">
-        <button
-          type="button"
-          className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10"
-        >
-          Edit
-        </button>
-        <button
-          type="button"
-          className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10 disabled:opacity-40"
-          disabled={!todo.completed}
-          title={todo.completed ? 'Delete todo' : 'Complete before deleting'}
-          onClick={() => dispatch({ type: 'DELETE_TODO', id: todo.id })}
-        >
-          Delete
-        </button>
+        {isEditing ? (
+          <button
+            type="button"
+            onClick={saveEdit}
+            className="rounded-lg bg-indigo-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-400 active:bg-indigo-500"
+          >
+            Save
+          </button>
+        ) : (
+          <>
+            <button
+              type="button"
+              onClick={startEditing}
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10"
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10 disabled:opacity-40"
+              disabled={!todo.completed}
+              title={todo.completed ? 'Delete todo' : 'Complete before deleting'}
+              onClick={() => dispatch({ type: 'DELETE_TODO', id: todo.id })}
+            >
+              Delete
+            </button>
+          </>
+        )}
       </div>
     </li>
   )
