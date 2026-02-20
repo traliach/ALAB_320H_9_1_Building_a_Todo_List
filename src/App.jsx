@@ -55,18 +55,18 @@ function TodoItem({ todo, dispatch }) {
   return (
     <li
       className={[
-        'flex items-center gap-3 rounded-xl border p-3',
-        isEditing ? 'ring-2 ring-indigo-400/30' : '',
+        'flex items-center gap-3 rounded-xl border p-3 transition',
+        isEditing ? 'ring-2 ring-sky-300/60' : '',
         todo.completed
-          ? 'border-white/10 bg-white/5 text-white/60'
-          : 'border-white/10 bg-black/20 text-white',
+          ? 'border-emerald-200/70 bg-emerald-50 text-slate-700'
+          : 'border-slate-200 bg-white text-slate-900',
       ].join(' ')}
     >
       <input
         type="checkbox"
         checked={todo.completed}
         onChange={() => dispatch({ type: 'TOGGLE_TODO', id: todo.id })}
-        className="h-4 w-4 accent-indigo-400"
+        className="h-4 w-4 accent-emerald-500"
       />
 
       <div className="flex-1">
@@ -80,7 +80,7 @@ function TodoItem({ todo, dispatch }) {
                 if (e.key === 'Enter') saveEdit()
                 if (e.key === 'Escape') cancelEdit()
               }}
-              className="h-10 w-full rounded-lg border border-white/10 bg-black/30 px-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+              className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-300/60"
               autoFocus
             />
           </label>
@@ -88,7 +88,7 @@ function TodoItem({ todo, dispatch }) {
           <span
             className={[
               'block text-sm sm:text-base',
-              todo.completed ? 'text-white/60 line-through' : '',
+              todo.completed ? 'text-slate-500 line-through' : '',
             ].join(' ')}
           >
             {todo.title}
@@ -101,7 +101,7 @@ function TodoItem({ todo, dispatch }) {
           <button
             type="button"
             onClick={saveEdit}
-            className="rounded-lg bg-indigo-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-400 active:bg-indigo-500"
+            className="rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-400 active:bg-emerald-500"
           >
             Save
           </button>
@@ -110,13 +110,13 @@ function TodoItem({ todo, dispatch }) {
             <button
               type="button"
               onClick={startEditing}
-              className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10"
+              className="rounded-lg border border-slate-200 bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700 hover:bg-sky-100"
             >
               Edit
             </button>
             <button
               type="button"
-              className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10 disabled:opacity-40"
+              className="rounded-lg border border-slate-200 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-100 disabled:opacity-40"
               disabled={!todo.completed}
               title={todo.completed ? 'Delete todo' : 'Complete before deleting'}
               onClick={() => dispatch({ type: 'DELETE_TODO', id: todo.id })}
@@ -147,15 +147,15 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-950 to-indigo-950 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-sky-100 via-white to-emerald-100 text-slate-900">
       <div className="mx-auto w-full max-w-2xl px-4 py-10 sm:py-14">
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur sm:p-8">
+        <div className="rounded-3xl border border-white/60 bg-white/70 p-6 shadow-xl backdrop-blur sm:p-8">
           <header className="space-y-1">
             <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
               Todo List
             </h1>
-            <p className="text-sm text-white/70">
-              Tiny checklist, big peace of mind.
+            <p className="text-sm text-slate-600">
+              For little helpers — one tiny win at a time.
             </p>
           </header>
 
@@ -168,12 +168,12 @@ export default function App() {
                 id="new-todo-title"
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                placeholder="Add a new todo..."
-                className="h-11 flex-1 rounded-xl border border-white/10 bg-black/30 px-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+                placeholder="Add a new todo (ex: brush teeth)"
+                className="h-11 flex-1 rounded-xl border border-white/60 bg-white px-4 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-300/60"
               />
               <button
                 type="submit"
-                className="h-11 shrink-0 rounded-xl bg-indigo-500 px-4 text-sm font-semibold text-white hover:bg-indigo-400 active:bg-indigo-500 disabled:opacity-50"
+                className="h-11 shrink-0 rounded-xl bg-sky-500 px-4 text-sm font-semibold text-white shadow-sm hover:bg-sky-400 active:bg-sky-500 disabled:opacity-50"
                 disabled={!newTitle.trim()}
               >
                 Add
@@ -181,9 +181,9 @@ export default function App() {
             </form>
 
             {todos.length === 0 ? (
-              <div className="mt-4 rounded-xl border border-dashed border-white/15 bg-black/10 p-6 text-center">
-                <p className="text-sm font-medium text-white/80">No todos yet</p>
-                <p className="mt-1 text-sm text-white/60">
+              <div className="mt-4 rounded-2xl border border-dashed border-white/70 bg-white/60 p-6 text-center">
+                <p className="text-sm font-semibold text-slate-800">No todos yet</p>
+                <p className="mt-1 text-sm text-slate-600">
                   Add your first one above.
                 </p>
               </div>
