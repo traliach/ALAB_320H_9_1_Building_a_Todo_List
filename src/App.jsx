@@ -47,6 +47,11 @@ function TodoItem({ todo, dispatch }) {
     setIsEditing(false)
   }
 
+  function cancelEdit() {
+    setDraftTitle(todo.title)
+    setIsEditing(false)
+  }
+
   return (
     <li
       className={[
@@ -71,6 +76,10 @@ function TodoItem({ todo, dispatch }) {
             <input
               value={draftTitle}
               onChange={(e) => setDraftTitle(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') saveEdit()
+                if (e.key === 'Escape') cancelEdit()
+              }}
               className="h-10 w-full rounded-lg border border-white/10 bg-black/30 px-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
               autoFocus
             />
