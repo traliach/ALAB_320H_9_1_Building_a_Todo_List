@@ -1,4 +1,4 @@
-import { useReducer } from 'react'
+import { useReducer, useState } from 'react'
 
 const initialTodos = [
   { id: crypto.randomUUID(), title: 'Prepare breakfast (banana pancakes)', completed: false },
@@ -10,6 +10,9 @@ const initialTodos = [
 
 function todosReducer(state, action) {
   switch (action.type) {
+    case 'ADD_TODO': {
+      return [action.todo, ...state]
+    }
     case 'TOGGLE_TODO': {
       return state.map((todo) =>
         todo.id === action.id ? { ...todo, completed: !todo.completed } : todo,
@@ -25,6 +28,19 @@ function todosReducer(state, action) {
 
 export default function App() {
   const [todos, dispatch] = useReducer(todosReducer, initialTodos)
+  const [newTitle, setNewTitle] = useState('')
+
+  function handleAddTodo(e) {
+    e.preventDefault()
+    const title = newTitle.trim()
+    if (!title) return
+
+    dispatch({
+      type: 'ADD_TODO',
+      todo: { id: crypto.randomUUID(), title, completed: false },
+    })
+    setNewTitle('')
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-950 to-indigo-950 text-white">
@@ -40,7 +56,27 @@ export default function App() {
           </header>
 
           <div className="mt-6">
-            <ul className="space-y-2">
+            <form onSubmit={handleAddTodo} className="flex gap-2">
+              <label className="sr-only" htmlFor="new-todo-title">
+                New todo title
+              </label>
+              <input
+                id="new-todo-title"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                placeholder="Add a new todo..."
+                className="h-11 flex-1 rounded-xl border border-white/10 bg-black/30 px-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+              />
+              <button
+                type="submit"
+                className="h-11 shrink-0 rounded-xl bg-indigo-500 px-4 text-sm font-semibold text-white hover:bg-indigo-400 active:bg-indigo-500 disabled:opacity-50"
+                disabled={!newTitle.trim()}
+              >
+                Add
+              </button>
+            </form>
+
+            <ul className="mt-4 space-y-2">
               {todos.map((todo) => (
                 <li
                   key={todo.id}
