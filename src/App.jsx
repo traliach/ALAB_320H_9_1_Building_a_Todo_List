@@ -8,19 +8,24 @@ const initialTodos = [
   { id: crypto.randomUUID(), title: 'Offer water every hour', completed: true },
 ]
 
+// Centralized state updates for the todo list.
 function todosReducer(state, action) {
   switch (action.type) {
+    // Add to the top so newest items appear first.
     case 'ADD_TODO': {
       return [action.todo, ...state]
     }
+    // Flip completed true/false for one todo.
     case 'TOGGLE_TODO': {
       return state.map((todo) =>
         todo.id === action.id ? { ...todo, completed: !todo.completed } : todo,
       )
     }
+    // Remove one todo by id.
     case 'DELETE_TODO': {
       return state.filter((todo) => todo.id !== action.id)
     }
+    // Save edited title for one todo.
     case 'UPDATE_TODO': {
       return state.map((todo) =>
         todo.id === action.id ? { ...todo, title: action.title } : todo,
@@ -32,6 +37,7 @@ function todosReducer(state, action) {
 }
 
 function TodoItem({ todo, dispatch }) {
+  // Per-item UI state stays local to this row.
   const [isEditing, setIsEditing] = useState(false)
   const [draftTitle, setDraftTitle] = useState(todo.title)
 
@@ -77,6 +83,7 @@ function TodoItem({ todo, dispatch }) {
               value={draftTitle}
               onChange={(e) => setDraftTitle(e.target.value)}
               onKeyDown={(e) => {
+                // Quick keyboard controls while editing.
                 if (e.key === 'Enter') saveEdit()
                 if (e.key === 'Escape') cancelEdit()
               }}
@@ -132,6 +139,7 @@ function TodoItem({ todo, dispatch }) {
 
 export default function App() {
   const [todos, dispatch] = useReducer(todosReducer, initialTodos)
+  // App-level input state for creating a new todo.
   const [newTitle, setNewTitle] = useState('')
 
   function handleAddTodo(e) {
@@ -139,6 +147,7 @@ export default function App() {
     const title = newTitle.trim()
     if (!title) return
 
+    // Create and insert a new todo at the top.
     dispatch({
       type: 'ADD_TODO',
       todo: { id: crypto.randomUUID(), title, completed: false },
